@@ -11,7 +11,9 @@ namespace Auth.Flow.IdentityServer.Configuration
           new List<IdentityResource>
           {
               new IdentityResources.OpenId(),
-              new IdentityResources.Profile()
+              new IdentityResources.Profile(),
+              new IdentityResources.Address(),
+              new IdentityResource("roles", "User role(s)", new List<string> { "role" })
           };
 
         public static List<TestUser> GetUsers() =>
@@ -25,7 +27,9 @@ namespace Auth.Flow.IdentityServer.Configuration
                   Claims = new List<Claim>
                   {
                       new Claim("given_name", "Amar"),
-                      new Claim("family_name", "Ćatović")
+                      new Claim("family_name", "Ćatović"),
+                      new Claim("address", "Kralja Tvrtka 12"),
+                      new Claim("role", "Admin")
                   }
               },
               new TestUser
@@ -36,7 +40,9 @@ namespace Auth.Flow.IdentityServer.Configuration
                   Claims = new List<Claim>
                   {
                       new Claim("given_name", "Josip"),
-                      new Claim("family_name", "Broz")
+                      new Claim("family_name", "Broz"),
+                      new Claim("address", "Long Avenue 289"),
+                      new Claim("role", "User")
                   }
               }
           };
@@ -58,9 +64,17 @@ namespace Auth.Flow.IdentityServer.Configuration
                 AllowedGrantTypes = GrantTypes.Hybrid,
                 RedirectUris = new List<string>{ "https://localhost:5010/signin-oidc" },
                 RequirePkce = false,
-                AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile, "testAPI" },
+                AllowedScopes = 
+                { 
+                    IdentityServerConstants.StandardScopes.OpenId, 
+                    IdentityServerConstants.StandardScopes.Profile,
+                    IdentityServerConstants.StandardScopes.Address,
+                    "roles",
+                    "testAPI" 
+                },
                 ClientSecrets = { new Secret("MVCSecret".Sha512()) },
-                PostLogoutRedirectUris = new List<string> { "https://localhost:5010/signout-callback-oidc" }
+                PostLogoutRedirectUris = new List<string> { "https://localhost:5010/signout-callback-oidc" },
+                RequireConsent = true
             }
         };
 

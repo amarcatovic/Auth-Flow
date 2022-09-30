@@ -39,6 +39,7 @@ namespace CompanyEmployees.Client.Controllers
             throw new Exception($"Problem with fetching data from the API: {response.ReasonPhrase}");
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Privacy()
         {
             return View();

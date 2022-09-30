@@ -1,15 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.IdentityModel.Tokens.Jwt;
 using CompanyEmployees.Client.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CompanyEmployees.Client
 {
@@ -18,6 +16,7 @@ namespace CompanyEmployees.Client
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         }
 
         public IConfiguration Configuration { get; }
@@ -42,6 +41,16 @@ namespace CompanyEmployees.Client
                 opt.SaveTokens = true;
                 opt.ClientSecret = "MVCSecret";
                 opt.GetClaimsFromUserInfoEndpoint = true;
+                opt.ClaimActions.DeleteClaim("sid");
+                opt.ClaimActions.DeleteClaim("idp");
+                opt.ClaimActions.MapUniqueJsonKey("address", "address");
+                opt.Scope.Add("roles");
+                opt.ClaimActions.MapUniqueJsonKey("role", "role");
+                opt.Scope.Add("address");
+                opt.TokenValidationParameters = new TokenValidationParameters
+                {
+                    RoleClaimType = "role"
+                };
                 opt.Scope.Add("testAPI");
             });
 
