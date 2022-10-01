@@ -1,3 +1,4 @@
+using Auth.Flow.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

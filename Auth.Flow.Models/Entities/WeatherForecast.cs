@@ -1,4 +1,4 @@
-namespace Auth.Flow.API
+namespace Auth.Flow.Models.Entities
 {
     public class WeatherForecast
     {

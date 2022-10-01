@@ -9,6 +9,7 @@ using CompanyEmployees.Client.Models;
 using CompanyEmployees.Client.Services;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
+using Auth.Flow.Models.Entities;
 
 namespace CompanyEmployees.Client.Controllers
 {
@@ -29,11 +30,11 @@ namespace CompanyEmployees.Client.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var companiesString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                var companyViewModel = JsonConvert.DeserializeObject<List<CompanyViewModel>>(companiesString).ToList();
+                var weatherForecastViewModel = JsonConvert.DeserializeObject<List<WeatherForecast>>(responseString).ToList();
 
-                return View(companyViewModel);
+                return View(weatherForecastViewModel);
             }
 
             return RedirectToAction("Logout", "Account");
