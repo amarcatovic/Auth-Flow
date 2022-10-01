@@ -11,7 +11,7 @@ var services = builder.Services;
 builder.Services.AddDbContext<IdentityServerDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection"), options => options.MigrationsAssembly("Auth.Flow.IdentityServer")));
 
-services.AddIdentity<User, IdentityRole>()
+services.AddIdentity<User, Role>()
         .AddEntityFrameworkStores<IdentityServerDbContext>()
         .AddDefaultTokenProviders();
 
@@ -32,7 +32,7 @@ services.AddIdentityServer()
             options.MigrationsAssembly("Auth.Flow.IdentityServer"));
     })
     .AddAspNetIdentity<User>()
-    .AddDeveloperSigningCredential(); // TODO: use AddSigningCredentials method and provide a valid certificate for production.
+    .AddDeveloperSigningCredential(); // TODO: use AddSigningCredential method and provide a valid certificate for production.
 
 services.AddControllersWithViews();
 

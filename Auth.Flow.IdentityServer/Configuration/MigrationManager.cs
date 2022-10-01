@@ -81,10 +81,12 @@ namespace Auth.Flow.IdentityServer.Configuration
                                 Email = "amar@test.com",
                                 EmailAddress = "amar@test.com",
                                 UserName = "amar@test.com",
-                                EmailConfirmed = true
+                                PhoneNumber = "123456789",
+                                MobileNumber = "123456789",
+                                EmailConfirmed = true,
+                                IsActive = true
                             };
 
-                            newUser.Id = Guid.NewGuid().ToString();
                             var result = userManager.CreateAsync(newUser, "Pass123$").Result;
                             if (!result.Succeeded)
                             {

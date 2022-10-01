@@ -36,7 +36,7 @@ namespace CompanyEmployees.Client.Controllers
                 return View(companyViewModel);
             }
 
-            throw new Exception($"Problem with fetching data from the API: {response.ReasonPhrase}");
+            return RedirectToAction("Logout", "Account");
         }
 
         [Authorize(Roles = "Admin")]

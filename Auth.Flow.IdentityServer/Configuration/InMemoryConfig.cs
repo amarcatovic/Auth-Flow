@@ -73,8 +73,7 @@ namespace Auth.Flow.IdentityServer.Configuration
                     "testAPI" 
                 },
                 ClientSecrets = { new Secret("MVCSecret".Sha512()) },
-                PostLogoutRedirectUris = new List<string> { "https://localhost:5010/signout-callback-oidc" },
-                RequireConsent = true
+                PostLogoutRedirectUris = new List<string> { "https://localhost:5010/signout-callback-oidc" }
             }
         };
 
