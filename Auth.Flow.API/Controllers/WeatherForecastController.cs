@@ -51,5 +51,13 @@ namespace Auth.Flow.API.Controllers
             })
             .ToArray();
         }
+
+        [HttpGet("privacy")]
+        [Authorize]
+        public IActionResult Privacy()
+        {
+            var claims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
+            return Ok(claims);
+        }
     }
 }

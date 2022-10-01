@@ -1,4 +1,5 @@
-﻿using IdentityServer4;
+﻿using IdentityModel;
+using IdentityServer4;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
 using System.Security.Claims;
@@ -74,6 +75,26 @@ namespace Auth.Flow.IdentityServer.Configuration
                 },
                 ClientSecrets = { new Secret("MVCSecret".Sha512()) },
                 PostLogoutRedirectUris = new List<string> { "https://localhost:5010/signout-callback-oidc" }
+            },
+            new Client
+            {
+                ClientName = "Angular-Client",
+                ClientId = "angular-client",
+                AllowedGrantTypes = GrantTypes.Code,
+                RedirectUris = new List<string>{ "https://localhost:4200/signin-callback", "https://localhost:4200/assets/silent-callback.html" },
+                RequirePkce = true,
+                AllowAccessTokensViaBrowser = true,
+                AllowedScopes =
+                {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    "testAPI"
+                },
+                AllowedCorsOrigins = { "https://localhost:4200" },
+                RequireClientSecret = false,
+                PostLogoutRedirectUris = new List<string> { "https://localhost:4200/signout-callback" },
+                RequireConsent = false,
+                AccessTokenLifetime = 600
             }
         };
 
@@ -83,7 +104,7 @@ namespace Auth.Flow.IdentityServer.Configuration
         public static IEnumerable<ApiResource> GetApiResources() =>
         new List<ApiResource>
         {
-            new ApiResource("testAPI", "Testing API", new List<string> { ClaimTypes.Name, ClaimTypes.Role })
+            new ApiResource("testAPI", "Testing API", new[] { JwtClaimTypes.Subject, JwtClaimTypes.Role })
             {
                 Scopes = { "testAPI" }
             }

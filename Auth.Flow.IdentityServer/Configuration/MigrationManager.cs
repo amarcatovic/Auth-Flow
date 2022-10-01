@@ -86,7 +86,8 @@ namespace Auth.Flow.IdentityServer.Configuration
                                 PhoneNumber = "123456789",
                                 MobileNumber = "123456789",
                                 EmailConfirmed = true,
-                                IsActive = true
+                                IsActive = true,
+                                IsOwner = true
                             };
 
                             var result = userManager.CreateAsync(newUser, "Pass123$").Result;

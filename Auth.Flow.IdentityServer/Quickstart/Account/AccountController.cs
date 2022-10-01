@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace IdentityServerHost.Quickstart.UI
@@ -119,6 +120,8 @@ namespace IdentityServerHost.Quickstart.UI
                             return this.LoadingPage("Redirect", model.ReturnUrl);
                         }
 
+                        await HandleUserClaims(user);
+
                         // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
                         return Redirect(model.ReturnUrl);
                     }
@@ -148,7 +151,6 @@ namespace IdentityServerHost.Quickstart.UI
             return View(vm);
         }
 
-        
         /// <summary>
         /// Show logout page
         /// </summary>
@@ -338,6 +340,23 @@ namespace IdentityServerHost.Quickstart.UI
             }
 
             return vm;
+        }
+
+        private async Task HandleUserClaims(User user)
+        {
+            var userClaims = await _userManager
+                .GetClaimsAsync(user);
+            var ownerClaim = userClaims
+                .FirstOrDefault(c => c.Value == "Owner");
+
+            if (user.IsOwner && ownerClaim is null)
+            {
+                await _userManager.AddClaimAsync(user, new Claim(JwtClaimTypes.Role, "Owner"));
+            }
+            else if (!user.IsOwner && ownerClaim is not null)
+            {
+                await _userManager.RemoveClaimAsync(user, ownerClaim);
+            }
         }
     }
 }

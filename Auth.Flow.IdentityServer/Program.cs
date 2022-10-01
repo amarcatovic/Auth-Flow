@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
 // Add services to the container.
+services.AddCors();
 builder.Services.AddDbContext<IdentityServerDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection"), options => options.MigrationsAssembly("Auth.Flow.IdentityServer")));
 
@@ -15,12 +16,16 @@ services.AddIdentity<User, Role>()
         .AddEntityFrameworkStores<IdentityServerDbContext>()
         .AddDefaultTokenProviders();
 
-services.AddIdentityServer()
+services.AddIdentityServer(opt =>
+    {
+        opt.Authentication.CookieLifetime = TimeSpan.FromMinutes(4);
+    })
     //.AddInMemoryApiScopes(InMemoryConfig.GetApiScopes())
     //.AddInMemoryApiResources(InMemoryConfig.GetApiResources())
     //.AddInMemoryIdentityResources(InMemoryConfig.GetIdentityResources())
     //.AddInMemoryClients(InMemoryConfig.GetClients())
     .AddTestUsers(InMemoryConfig.GetUsers())
+    .AddProfileService<CustomProfileService>()
     .AddConfigurationStore(opt =>
      {
          opt.ConfigureDbContext = c => c.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection"), options =>
@@ -46,6 +51,7 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseStaticFiles();
 app.UseRouting();
+app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.UseIdentityServer(); 
 
