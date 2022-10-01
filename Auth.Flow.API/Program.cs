@@ -2,15 +2,6 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
 // Add services to the container.
-services.AddAuthorization(options =>
-{
-    options.AddPolicy("ApiScope", policy =>
-    {
-        policy.RequireAuthenticatedUser();
-        policy.RequireClaim("scope", "testAPI");
-    });
-});
-
 services.AddAuthentication("Bearer")
    .AddJwtBearer("Bearer", opt =>
    {

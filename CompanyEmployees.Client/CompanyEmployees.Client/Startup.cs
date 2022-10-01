@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using CompanyEmployees.Client.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -44,14 +45,16 @@ namespace CompanyEmployees.Client
                 opt.ClaimActions.DeleteClaim("sid");
                 opt.ClaimActions.DeleteClaim("idp");
                 opt.ClaimActions.MapUniqueJsonKey("address", "address");
-                opt.Scope.Add("roles");
                 opt.ClaimActions.MapUniqueJsonKey("role", "role");
+                opt.Scope.Add("roles");
                 opt.Scope.Add("address");
                 opt.TokenValidationParameters = new TokenValidationParameters
                 {
-                    RoleClaimType = "role"
+                    RoleClaimType = ClaimTypes.Role
                 };
                 opt.Scope.Add("testAPI");
+                opt.Scope.Add("openid");
+                opt.Scope.Add("profile");
             });
 
             services.AddControllersWithViews();

@@ -30,6 +30,15 @@ namespace Auth.Flow.API.Controllers
                 .FindFirst(ClaimTypes.NameIdentifier)?
                 .Value; // Gets current user ID
 
+            var claims = HttpContext
+                .User
+                .Claims;
+
+            var roles = HttpContext
+                .User
+                .FindFirst(ClaimTypes.Role)
+                ?.Value;
+
             var isAdmin = HttpContext
                 .User
                 .IsInRole("Admin");

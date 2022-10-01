@@ -70,7 +70,7 @@ namespace Auth.Flow.IdentityServer.Configuration
                     IdentityServerConstants.StandardScopes.Profile,
                     IdentityServerConstants.StandardScopes.Address,
                     "roles",
-                    "testAPI" 
+                    "testAPI"
                 },
                 ClientSecrets = { new Secret("MVCSecret".Sha512()) },
                 PostLogoutRedirectUris = new List<string> { "https://localhost:5010/signout-callback-oidc" }
@@ -78,15 +78,14 @@ namespace Auth.Flow.IdentityServer.Configuration
         };
 
         public static IEnumerable<ApiScope> GetApiScopes() =>
-            new List<ApiScope> { new ApiScope("testAPI", "Testing API") };
+            new List<ApiScope> { new ApiScope("testAPI", "Testing API", new List<string> { ClaimTypes.Name, ClaimTypes.Role }) };
 
         public static IEnumerable<ApiResource> GetApiResources() =>
         new List<ApiResource>
         {
-            new ApiResource("testAPI", "Testing API")
+            new ApiResource("testAPI", "Testing API", new List<string> { ClaimTypes.Name, ClaimTypes.Role })
             {
-                Scopes = { "testAPI" },
-                UserClaims = { "role" }
+                Scopes = { "testAPI" }
             }
         };
     }
