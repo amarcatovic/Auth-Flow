@@ -26,10 +26,9 @@
             </th>
             @if (User.IsInRole("Admin"))
             {
-                <td>
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                </td>
+                <th>
+                    Details | Delete
+                </th>
             }
         </tr>
     </thead>

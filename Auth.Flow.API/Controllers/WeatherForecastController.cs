@@ -1,6 +1,7 @@
 using Auth.Flow.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Auth.Flow.API.Controllers
 {
@@ -24,6 +25,15 @@ namespace Auth.Flow.API.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
+            var user = HttpContext
+                .User
+                .FindFirst(ClaimTypes.NameIdentifier)?
+                .Value; // Gets current user ID
+
+            var isAdmin = HttpContext
+                .User
+                .IsInRole("Admin");
+
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),

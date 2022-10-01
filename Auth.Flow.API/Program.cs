@@ -2,12 +2,22 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
 // Add services to the container.
+services.AddAuthorization(options =>
+{
+    options.AddPolicy("ApiScope", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim("scope", "testAPI");
+    });
+});
+
 services.AddAuthentication("Bearer")
    .AddJwtBearer("Bearer", opt =>
    {
        opt.RequireHttpsMetadata = false;
        opt.Authority = "https://localhost:7240";
        opt.Audience = "testAPI";
+       opt.MapInboundClaims = true;
    });
 
 builder.Services.AddControllers();

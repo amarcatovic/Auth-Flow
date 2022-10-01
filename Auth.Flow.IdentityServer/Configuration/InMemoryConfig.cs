@@ -85,7 +85,8 @@ namespace Auth.Flow.IdentityServer.Configuration
         {
             new ApiResource("testAPI", "Testing API")
             {
-                Scopes = { "testAPI" }
+                Scopes = { "testAPI" },
+                UserClaims = { "role" }
             }
         };
     }

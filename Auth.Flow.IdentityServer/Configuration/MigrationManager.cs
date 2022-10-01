@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
+using System.Security.Claims;
 using Auth.Flow.IdentityServer.Infrastructure;
 using Auth.Flow.IdentityServer.Infrastructure.Models;
+using IdentityModel;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Identity;
@@ -88,6 +90,42 @@ namespace Auth.Flow.IdentityServer.Configuration
                             };
 
                             var result = userManager.CreateAsync(newUser, "Pass123$").Result;
+                            if (!result.Succeeded)
+                            {
+                                throw new Exception(result.Errors.First().Description);
+                            }
+                            result = userManager.AddClaimsAsync(newUser, new Claim[]{
+                                new Claim(JwtClaimTypes.Role, "Admin"),
+                                new Claim("some-random-claim-key", "some-random-claim-value"),
+                            }).Result;
+                            if (!result.Succeeded)
+                            {
+                                throw new Exception(result.Errors.First().Description);
+                            }
+                        }
+                        if (userManager.FindByEmailAsync("user@test.com").Result is null)
+                        {
+                            var newUser = new User
+                            {
+                                FirstName = "User",
+                                LastName = "Test",
+                                Email = "user@test.com",
+                                EmailAddress = "user@test.com",
+                                UserName = "user@test.com",
+                                PhoneNumber = "123456789",
+                                MobileNumber = "123456789",
+                                EmailConfirmed = true,
+                                IsActive = true
+                            };
+
+                            var result = userManager.CreateAsync(newUser, "Pass123$").Result;
+                            if (!result.Succeeded)
+                            {
+                                throw new Exception(result.Errors.First().Description);
+                            }
+                            result = userManager.AddClaimsAsync(newUser, new Claim[]{
+                                new Claim("some-random-claim-key", "some-random-claim-value"),
+                            }).Result;
                             if (!result.Succeeded)
                             {
                                 throw new Exception(result.Errors.First().Description);
